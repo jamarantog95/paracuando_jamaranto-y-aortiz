@@ -16,7 +16,13 @@ module.exports = {
           name: 'Peru',
           created_at: new Date(),
           updated_at: new Date()
-        }
+        },
+        {
+          id: '2',
+          name: 'Argentina',
+          created_at: new Date(),
+          updated_at: new Date()
+        },
       ], { transaction })
 
       await transaction.commit()

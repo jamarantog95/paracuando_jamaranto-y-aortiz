@@ -14,18 +14,21 @@ module.exports = {
         {
           id: '1',
           name: 'Marcas y Tiendas',
+          description: 'X',
           created_at: new Date(),
           updated_at: new Date()
         },
         {
           id: '2',
           name: 'Artistas y Conciertos',
+          description: 'X',
           created_at: new Date(),
           updated_at: new Date()
         },
         {
           id: '3',
           name: 'Torneos',
+          description: 'X',
           created_at: new Date(),
           updated_at: new Date()
         }

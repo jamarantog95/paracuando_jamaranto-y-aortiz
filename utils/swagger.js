@@ -1,29 +1,55 @@
+const path = require("path") 
+const swaggerJSDoc = require('swagger-jsdoc')
 const swaggerUI = require('swagger-ui-express')
-const swaggerJsDoc = require('swagger-jsdoc')
+
 
 // Informacion Metadata para nuestra API
-const options = {
+const swaggerSpec = {
   definition:{
     openapi: "3.0.0",
     info:{
-      title:'Countries API',
+      title:'Documentation API',
       version:'1.0.0',
-      description:'Code API definition'
     },
     servers:[
       {
-         url:"http://localhost:8001"
-       },
-    ],
+        url:"http://localhost:8001/"
+      }
+    ]
   },
-  apis:['./routes/models.router.js'],
+  apis:[`${path.join(__dirname,"./routes/*.js")}`],
 };
 
-const openapiSpecification = swaggerJsDoc(options);
+// Middlewares
+app.use(
+   "/api-doc", 
+   swaggerUI.serve, 
+   swaggerUI.setup(swaggerJSDoc(swaggerSpec))
+);
 
-module.exports = (app) =>{
-   app.use('./api-docs',swaggerUI.serve, swaggerUI.setup(openapiSpecification));
-}
+// const swaggerSpec = swaggerJSDoc(options);
+
+// const swaggerDocs = (app,port) =>{
+//   app.use('./api/v1/docs',swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+//   app.get('./api/v1/docs.json',(req,res) => {
+//     res.setHeader("Content-Type","application/json")
+//     res.send(swaggerSpec);
+//   });
+
+//   console.log(`Version 1 Docs area available http://localhost:${port}/api/v1/docs`)
+
+// };
+
+// module.exports =  ;
+
+
+
+
+// const openapiSpecification = swaggerJsDoc(options);
+
+// module.exports = (app) =>{
+//    app.use('./api-docs',swaggerUI.serve, swaggerUI.setup(openapiSpecification));
+// }
 
 // const path = require 'path';
 // const swagger_spect = {

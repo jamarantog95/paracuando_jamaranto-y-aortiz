@@ -5,6 +5,8 @@ module.exports = (sequelize, DataTypes) => {
     class Cities extends Model {
         static associate(models) {
             Cities.belongsTo(models.States, { as: 'states', foreignKey: 'state_id' })
+
+            Cities.hasMany(models.Publications, { as: 'publications', foreignKey: 'city_id' })
         }
     }
 
@@ -12,13 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            allowNull: false,
         },
         state_id: DataTypes.INTEGER,
         name: {
             type: DataTypes.STRING,
-            allowNull: false,
-        }
+        },
     }, {
         sequelize,
         modelName: 'Cities',
@@ -26,9 +26,8 @@ module.exports = (sequelize, DataTypes) => {
         underscored: true,
         timestamps: true,
         scopes: {
-            view_public: {
-                attributes: ['id', 'name']
-            },
+            view_public: { attributes: ['id', 'name'] },
+            view_me: { attributes: ['id', 'name'] },
             no_timestamps: {
                 attributes: { exclude: ['created_at', 'updated_at'] }
             },

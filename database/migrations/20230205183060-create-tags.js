@@ -4,7 +4,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction()
     try {
-      await queryInterface.createTable('publicationstypes', {
+      await queryInterface.createTable('tags', {
         id: {
           allowNull: false,
           autoIncrement: true,
@@ -12,17 +12,24 @@ module.exports = {
           type: Sequelize.INTEGER
         },
         name: {
-          allowNull: false,
           type: Sequelize.STRING,
-          unique: true
+          allowNull: false,
+        },
+        description: {
+          type: Sequelize.STRING,
+          allowNull: true,
+        },
+        image_url: {
+          type: Sequelize.STRING,
+          allowNull: true,
         },
         created_at: {
-          allowNull: false,
           type: Sequelize.DATE,
+          allowNull: false,
         },
         updated_at: {
-          allowNull: false,
           type: Sequelize.DATE,
+          allowNull: false,
         }
       }, { transaction })
       await transaction.commit()
@@ -34,7 +41,7 @@ module.exports = {
   down: async (queryInterface, /*Sequelize*/) => {
     const transaction = await queryInterface.sequelize.transaction()
     try {
-      await queryInterface.dropTable('publicationstypes', { transaction })
+      await queryInterface.dropTable('tags', { transaction })
       await transaction.commit()
     } catch (error) {
       await transaction.rollback()

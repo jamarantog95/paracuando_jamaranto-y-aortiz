@@ -4,10 +4,8 @@ module.exports = (sequelize, DataTypes) => {
 
    class Countries extends Model {
       static associate(models) {
-
          Countries.hasMany(models.Users, { as: 'users', foreignKey: 'country_id' })
-         Countries.hasMany(models.States, { as: 'states', foreignKey: 'state_id' })
-         // Countries.hasMany(models.States, { as: 'states', foreignKey: 'country_id' })
+         Countries.hasMany(models.States, { as: 'states', foreignKey: 'country_id' })
       }
    }
 
@@ -26,9 +24,8 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true,
       timestamps: true,
       scopes: {
-         view_public: {
-            attributes: ['id', 'name']
-         },
+         view_public: { attributes: ['id', 'name'] },
+         view_me: { attributes: ['id', 'name'] },
          no_timestamps: {
             attributes: { exclude: ['created_at', 'updated_at'] }
          },

@@ -6,10 +6,10 @@ module.exports = {
         try {
             await queryInterface.createTable('cities', {
                 id: {
-                    allowNull: false,
                     autoIncrement: true,
                     primaryKey: true,
-                    type: Sequelize.INTEGER
+                    type: Sequelize.INTEGER,
+                    allowNull: false,
                 },
                 state_id: {
                     type: Sequelize.INTEGER,
@@ -23,17 +23,16 @@ module.exports = {
                     onDelete: 'RESTRICT'
                 },
                 name: {
-                    allowNull: false,
                     type: Sequelize.STRING,
-                    unique: true
+                    allowNull: false,
                 },
                 created_at: {
-                    allowNull: false,
                     type: Sequelize.DATE,
+                    allowNull: false,
                 },
                 updated_at: {
-                    allowNull: false,
                     type: Sequelize.DATE,
+                    allowNull: false,
                 }
             }, { transaction })
             await transaction.commit()

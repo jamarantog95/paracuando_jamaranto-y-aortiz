@@ -4,28 +4,30 @@ module.exports = {
     up: async (queryInterface, Sequelize) => {
         const transaction = await queryInterface.sequelize.transaction()
         try {
-            await queryInterface.createTable('states', {
-                id: {
-                    autoIncrement: true,
+            await queryInterface.createTable('usertags', {
+                tag_id: {
+                    type: Sequelize.INTEGER,
                     primaryKey: true,
-                    type: Sequelize.INTEGER,
-                    allowNull: false,
-                },
-                country_id: {
-                    type: Sequelize.INTEGER,
                     allowNull: true,
                     foreignKey: true,
                     references: {
-                        model: 'countries',
+                        model: 'tags',
                         key: 'id'
                     },
                     onUpdate: 'CASCADE',
                     onDelete: 'RESTRICT'
                 },
-                name: {
-                    type: Sequelize.STRING,
-                    allowNull: false,
-                    unique: true
+                user_id: {
+                    type: Sequelize.UUID,
+                    primaryKey: true,
+                    allowNull: true,
+                    foreignKey: true,
+                    references: {
+                        model: 'users',
+                        key: 'id'
+                    },
+                    onUpdate: 'CASCADE',
+                    onDelete: 'RESTRICT'
                 },
                 created_at: {
                     type: Sequelize.DATE,
@@ -45,7 +47,7 @@ module.exports = {
     down: async (queryInterface, /*Sequelize*/) => {
         const transaction = await queryInterface.sequelize.transaction()
         try {
-            await queryInterface.dropTable('states', { transaction })
+            await queryInterface.dropTable('usertags', { transaction })
             await transaction.commit()
         } catch (error) {
             await transaction.rollback()

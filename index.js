@@ -3,8 +3,33 @@ const cors = require('cors')
 const helmet = require('helmet')
 require('dotenv').config()
 
+// swagger
+const path = require("path")
+const swaggerJSDoc = require('swagger-jsdoc')
+const swaggerUI = require('swagger-ui-express')
+
+// Rutas
 const routerModels = require('./routes/models.router')
 const routerErrorHandler = require('./routes/errorhandler.router')
+
+
+// Informacion Metadata para nuestra API
+const swaggerSpec = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: 'Documentation API',
+      version: '1.0.0',
+    },
+    servers: [
+      {
+        url: "http://localhost:8001/"
+      }
+    ]
+  },
+  apis: [`${path.join(__dirname, "./routes/*.routes.js")}`],
+};
+
 
 const app = express()
 const PORT = process.env.PORT || 8001
@@ -23,6 +48,14 @@ const corsOptions = {
   }
 }
 
+// Middlewares
+app.use(
+  "/api-doc",
+  swaggerUI.serve,
+  swaggerUI.setup(swaggerJSDoc(swaggerSpec))
+);
+
+
 if (process.env.NODE_ENV === 'production') {
   app.use(cors())
   /* Set security HTTP headers */
@@ -34,6 +67,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   app.use(cors())
 }
+
 
 /*
 Accept Json & form-urlencoded
@@ -58,5 +92,5 @@ routerModels(app)
 routerErrorHandler(app)
 
 app.listen(PORT, () => {
-  console.log(`Server on PORT: ${PORT}`)
+  console.log(`Server on PORT: ${PORT}`);
 })

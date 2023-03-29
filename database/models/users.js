@@ -6,8 +6,11 @@ module.exports = (sequelize, DataTypes) => {
       static associate(models) {
          Users.belongsTo(models.Countries, { as: 'country', foreignKey: 'country_id' })
 
-         // Users.belongsTo(models.PublicationsTypes, { as: 'publicationstypes', foreignKey: 'publicationtype_id' })
          Users.hasMany(models.Profiles, { as: 'profiles', foreignKey: 'user_id' })
+         Users.hasMany(models.Publications, { as: 'publications02', foreignKey: 'user_id' })
+
+         Users.belongsToMany(models.Publications, { as: 'publications', foreignKey: 'user_id', through: 'votes' })
+         Users.belongsToMany(models.Tags, { as: 'tags', foreignKey: 'tag_id', through: 'usertags' })
       }
    }
    Users.init({
@@ -17,31 +20,26 @@ module.exports = (sequelize, DataTypes) => {
       },
       first_name: {
          type: DataTypes.STRING,
-         allowNull: false,
          validate: {
             notEmpty: true
          }
       },
       last_name: {
          type: DataTypes.STRING,
-         allowNull: false,
          validate: {
             notEmpty: true
          }
       },
       email: {
          type: DataTypes.STRING,
-         allowNull: false,
          validate: {
             isEmail: true
          }
       },
       username: {
-         allowNull: true,
          type: DataTypes.STRING
       },
       password: {
-         allowNull: false,
          type: DataTypes.STRING
       },
       email_verified: {

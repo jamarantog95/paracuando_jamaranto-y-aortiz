@@ -12,12 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            allowNull: false,
         },
         country_id: DataTypes.INTEGER,
         name: {
             type: DataTypes.STRING,
-            allowNull: false,
         }
     }, {
         sequelize,

@@ -2,9 +2,10 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class Tags extends Model {
-        // static associate(models) {
-        //     Tags.hasMany(models.Profiles, { as: 'tags', foreignKey: 'role_id' })
-        // }
+        static associate(models) {
+            Tags.hasMany(models.PublicationsTags, { as: 'publicationstags', foreignKey: 'tag_id' })
+            Tags.hasMany(models.UserTags, { as: 'userstags', foreignKey: 'user_id' })
+        }
     }
     Tags.init({
         id: {
@@ -30,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         underscored: true,
         timestamps: true,
         scopes: {
+            view_public: { attributes: ['id', 'name', 'description', 'image_url'] },
             no_timestamps: { attributes: { exclude: ['created_at', 'updated_at'] } }
         }
     });

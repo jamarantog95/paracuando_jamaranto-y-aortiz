@@ -12,17 +12,16 @@ module.exports = {
           type: Sequelize.INTEGER
         },
         name: {
-          allowNull: false,
           type: Sequelize.STRING,
-          unique: true
+          allowNull: false,
         },
         created_at: {
-          allowNull: false,
           type: Sequelize.DATE,
+          allowNull: false,
         },
         updated_at: {
-          allowNull: false,
           type: Sequelize.DATE,
+          allowNull: false,
         }
       }, { transaction })
       await transaction.commit()
