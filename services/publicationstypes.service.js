@@ -35,20 +35,6 @@ class PublicationTypesService {
       return publicationstypes
    }
 
-   async createPublicationType({ name }) {
-      const transaction = await models.sequelize.transaction()
-      try {
-         let newPublicationType = await models.PublicationsTypes.create({
-            name
-         }, { transaction })
-
-         await transaction.commit()
-         return newPublicationType
-      } catch (error) {
-         await transaction.rollback()
-         throw error
-      }
-   }
    //Return Instance if we do not converted to json (or raw:true)
    async getPublicationTypeOr404(id) {
       let publicationtype = await models.PublicationsTypes.findByPk(id, { raw: true })
@@ -82,23 +68,6 @@ class PublicationTypesService {
       }
    }
 
-   async removePublicationType(id) {
-      const transaction = await models.sequelize.transaction()
-      try {
-         let publicationtype = await models.PublicationsTypes.findByPk(id)
-
-         if (!publicationtype) throw new CustomError('Not found Publication Type', 404, 'Not Found')
-
-         await publicationtype.destroy({ transaction })
-
-         await transaction.commit()
-
-         return publicationtype
-      } catch (error) {
-         await transaction.rollback()
-         throw error
-      }
-   }
 
 }
 

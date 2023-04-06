@@ -6,10 +6,10 @@ module.exports = {
     try {
       await queryInterface.createTable('tags', {
         id: {
+          type: Sequelize.INTEGER,
           allowNull: false,
-          autoIncrement: true,
           primaryKey: true,
-          type: Sequelize.INTEGER
+          autoIncrement: true,
         },
         name: {
           type: Sequelize.STRING,

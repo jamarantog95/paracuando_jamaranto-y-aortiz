@@ -21,11 +21,25 @@ const swaggerSpec = {
       title: 'Documentation API',
       version: '1.0.0',
     },
+
     servers: [
       {
         url: "http://localhost:8001/"
       }
-    ]
+    ],
+
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          description: '<strong>Add JWT Token</strong>',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          in: 'header',
+        },
+      },
+    },
+
   },
   apis: [`${path.join(__dirname, "./routes/*.routes.js")}`],
 };

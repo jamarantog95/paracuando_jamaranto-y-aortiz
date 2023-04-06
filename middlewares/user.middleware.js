@@ -1,5 +1,8 @@
 const models = require('../database/models');
+const ProfilesService = require('../services/profiles.service');
 const { CustomError } = require('../utils/helpers');
+
+const profilesService = new ProfilesService();
 
 const isAdmin = async (request, response, next) => {
     try {

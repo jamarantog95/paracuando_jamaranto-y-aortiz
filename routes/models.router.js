@@ -10,6 +10,7 @@ const routesCountry = require('./countries.routes')
 const routesState = require('./state.routes')
 const routesCity = require('./city.routes')
 const routesTag = require('./tag.routes')
+const routesRol = require('./roles.routes')
 
 
 function routerModels(app) {
@@ -18,11 +19,12 @@ function routerModels(app) {
   app.use('/api/v1', router)
   router.use('/auth', routesAuth)
   router.use('/users', routesUser)
-  router.use('/publicationstypes', routesPublicationType)
+  router.use('/publications-types', routesPublicationType)
   router.use('/countries', routesCountry)
   router.use('/states', routesState)
   router.use('/cities', routesCity)
   router.use('/tags', routesTag)
+  router.use('/roles', routesRol)
 }
 
 module.exports = routerModels

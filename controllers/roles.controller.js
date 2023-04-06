@@ -1,12 +1,14 @@
 const { request, response } = require("express")
-const CitiesService = require("../services/cities.service")
+const RolesService = require("../services/roles.service")
 
 const { getPagination, getPagingData } = require("../utils/helpers")
 
-const citiesService = new CitiesService()
 
 
-const getCities = async (request, response, next) => {
+const rolesService = new RolesService()
+
+
+const getRoles = async (request, response, next) => {
 
     try {
         let query = request.query
@@ -16,13 +18,13 @@ const getCities = async (request, response, next) => {
         query.limit = limit
         query.offset = offset
 
-        let cities = await citiesService.findAndCount(query)
+        let roles = await rolesService.findAndCount(query)
 
-        const results = getPagingData(cities, page, limit)
+        const results = getPagingData(roles, page, limit)
         return response.status(200).json({
-            cities,
+            roles,
             results,
-            results: 'Cities found',
+            results: 'Roles found',
         });
     } catch (error) {
         next(error)
@@ -32,6 +34,6 @@ const getCities = async (request, response, next) => {
 
 
 module.exports = {
-    getCities
+    getRoles
 }
 

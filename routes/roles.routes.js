@@ -1,24 +1,25 @@
 const express = require('express');
-const { getCountries } = require('../controllers/country.controller');
+const { getRoles } = require('../controllers/roles.controller');
+
 
 const router = express.Router()
 
 /**
  * @swagger
  * tags:
- *   - name: Countries
- *     description: Información acerca de Paises
+ *   - name: Roles
+ *     description: Información acerca de Roles
  */
 
 
 /**
  * @swagger
- * /api/v1/countries:
+ * /api/v1/roles:
  *   get:
  *     tags:
- *       - Countries
- *     summary: Devuelve los paises
- *     description: Retorna los paises
+ *       - Roles
+ *     summary: Devuelve los roles
+ *     description: Retorna los roles
  * 
  *     responses:
  *       200:
@@ -26,7 +27,7 @@ const router = express.Router()
  *     security:  
  *       - bearerAuth: []
  */
-router.get('/', getCountries);
+router.get('/', getRoles);
 
 
 module.exports = router

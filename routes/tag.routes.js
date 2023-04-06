@@ -1,27 +1,13 @@
 const express = require('express');
-const { getTags, getTag, updateTag } = require('../controllers/tag.controller');
+const { getTags, getTag, createTag, updateTag, deleteTag } = require('../controllers/tag.controller');
 
 const router = express.Router()
 
 /**
  * @swagger
- * components:
- *  schemas:
- *    Tag:
- *      type: object
- *      properties:
- *        id:
- *          type: integer
- *          description: The Tag id
- *        name:
- *          type: string
- *          description: The name of tag
- *      required:
- *         - id
- *         - name
- *      example:
- *         id: 4
- *         name: Musica
+ * tags:
+ *   - name: Tags
+ *     description: Manejo de Categorías
  */
 
 
@@ -31,25 +17,15 @@ const router = express.Router()
  * /api/v1/tags:
  *   get:
  *     tags:
- *       - Tag
- *     summary: Get Tags
+ *       - Tags
+ *     summary: Devuelve los tags
+ *     description: Retorna los tags
  * 
  *     responses:
  *       200:
  *         description: Successful operation
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: Tag Found
- *                 data:
- *                   type: array 
- *                   items:
- *                     type: object 
- *                     $ref: "#/components/schemas/Tag"
+ *     security:  
+ *       - bearerAuth: []
  */
 router.get('/', getTags);
 
@@ -59,8 +35,9 @@ router.get('/', getTags);
  * /api/v1/tags/{id}:
  *   get:
  *     tags:
- *       - Tag
- *     summary: Get Tag
+ *       - Tags
+ *     summary: Encuentra un tag
+ *     description: Devuelve información del tag
  *     parameters:
  *        - in: path
  *          name: id
@@ -70,25 +47,37 @@ router.get('/', getTags);
  *     responses:
  *       200:
  *         description: Successful operation
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: Tag Found
- *                 data:
- *                   type: array 
- *                   items:
- *                     type: object 
- *                     $ref: "#/components/schemas/Tag"
- *       400:
- *        description: Invalid ID supplied
- *       404:
- *        description: Tag not found
+ *     security:  
+ *       - bearerAuth: []
  */
 router.get('/:id', getTag);
+
+
+/**
+ * @swagger
+ * /api/v1/tags:
+ *   post:
+ *     tags:
+ *       - Tags
+ *     summary: Añade un tag
+ *     description: Crea un tag
+ * 
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AddTag'
+ *         application/x-www-form-urlencoded:
+ *           schema: 
+ *             $ref: "#/components/schemas/AddTag"
+ * 
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *     security:  
+ *       - bearerAuth: []
+ */
+router.post('/', createTag);
 
 
 /**
@@ -96,8 +85,9 @@ router.get('/:id', getTag);
  * /api/v1/tags/{id}:
  *   put:
  *     tags:
- *       - Tag
- *     summary: Update Tag
+ *       - Tags
+ *     summary: Altera los campos del tag
+ *     description: Editará el tag
  *     parameters:
  *        - name: id
  *          in: path
@@ -110,28 +100,64 @@ router.get('/:id', getTag);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Tag'
+ *             $ref: '#/components/schemas/AddTag'
  *         application/x-www-form-urlencoded:
  *           schema: 
- *             $ref: "#/components/schemas/Tag"
+ *             $ref: "#/components/schemas/AddTag"
  * 
  *     responses:
  *       200:
  *         description: Successful operation
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: Tag Found
- *                 data:
- *                   type: array 
- *                   items:
- *                     type: object 
- *                     $ref: "#/components/schemas/Tag"
+ *     security:  
+ *       - bearerAuth: []
+
  */
 router.put('/:id', updateTag);
 
+
+/**
+ * @swagger
+ * /api/v1/tags/{id}:
+ *   delete:
+ *     tags:
+ *       - Tags
+ *     summary: Remueve un tag
+ *     description: Borra información del tag y sus asociaciones
+ *     parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          schema:
+ *            type: integer
+ * 
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *     security:  
+ *       - bearerAuth: []
+
+ */
+router.delete('/:id', deleteTag);
+
+
 module.exports = router
+
+
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    AddTag:
+ *      type: object
+ *      properties:
+ *        name:
+ *          type: string
+ *        description:
+ *          type: string
+ *      required:
+ *         - name
+ *         - description
+ *      example:
+ *         name: Musica
+ *         description: genero musica
+ */

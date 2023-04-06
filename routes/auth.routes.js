@@ -10,6 +10,157 @@ const { signUp, logIn, forgetPassword, restorePassword, userToken } = require('.
 
 /**
  * @swagger
+ * tags:
+ *   - name: Auth
+ *     description: Autenticación del Usuario
+ */
+
+
+/**
+ * @swagger
+ * /api/v1/auth/login:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Login Usuario
+ *     description: Ingrese las credenciales de usuario
+ * 
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserLogin'
+ *         application/x-www-form-urlencoded:
+ *           schema: 
+ *             $ref: "#/components/schemas/UserLogin"
+ * 
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ */
+router.post('/login', logIn)
+
+/**
+ * @swagger
+ * /api/v1/auth/sign-up:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Sign-Up Usuario
+ *     description: Un usuario se registra
+ * 
+ *     requestBody:
+ *       description: 
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserSignUp'
+ *         application/x-www-form-urlencoded:
+ *           schema: 
+ *             $ref: "#/components/schemas/UserSignUp"
+ * 
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ */
+router.post('/sign-up', verifySchema(signupSchema, 'body'), signUp)
+
+/**
+ * @swagger
+ * /api/v1/auth/forget-password:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Reset Password petition
+ *     description: El usuario setea un token en la DB para que pueda cambiar su contraseña El token tiene expiracion.
+ * 
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserForgetPassword'
+ *         application/x-www-form-urlencoded:
+ *           schema: 
+ *             $ref: "#/components/schemas/UserForgetPassword"
+ * 
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ */
+router.post('/forget-password', verifySchema(forgetPasswordSchema, 'body'), forgetPassword)
+
+/**
+ * @swagger
+ * /api/v1/auth/change-password/:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Change Password
+ *     description: El usuario enviará su contraseña junto con el token proporcionado al email para poder re establecer su contraseña
+ * 
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserResetPassword'
+ *         application/x-www-form-urlencoded:
+ *           schema: 
+ *             $ref: "#/components/schemas/UserResetPassword"
+ * 
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ */
+router.post('/change-password/:token', verifySchema(restorePasswordSchema, 'body'), restorePassword)
+
+
+/**
+ * @swagger
+ * /api/v1/auth/me:
+ *   get:
+ *     tags:
+ *       - Auth
+ *     summary: User Loggued Info
+ * 
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *     security:  
+ *       - bearerAuth: []
+ * 
+ */
+router.get(
+   '/me',
+   passport.authenticate('jwt', { session: false }),
+   userToken
+);
+
+router.get(
+   '/testing',
+   passport.authenticate('jwt', { session: false }),
+   async (request, response, next) => {
+      try {
+         return response.status(200).json({
+            results: {
+               user: request.user,
+               isAuthenticated: request.isAuthenticated(),
+               isUnauthenticated: request.isUnauthenticated(),
+               _sessionManager: request._sessionManager,
+               authInfo: request.authInfo,
+            },
+         });
+      } catch (error) {
+         console.log(error);
+         next(error);
+      }
+   }
+);
+
+module.exports = router
+
+
+/**
+ * @swagger
  * components:
  *  schemas:
  *    UserLogin:
@@ -21,6 +172,7 @@ const { signUp, logIn, forgetPassword, restorePassword, userToken } = require('.
  *        password:
  *          type: string
  *          description: the user password
+ *          format: password
  *      required:
  *         - email
  *         - password
@@ -28,6 +180,7 @@ const { signUp, logIn, forgetPassword, restorePassword, userToken } = require('.
  *         email: jc_amg@email.com
  *         password: 1jc90xD
  */
+
 
 /**
  * @swagger
@@ -62,86 +215,36 @@ const { signUp, logIn, forgetPassword, restorePassword, userToken } = require('.
  */
 
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    UserForgetPassword:
+ *      type: object
+ *      properties:
+ *        email:
+ *          type: string
+ *          description: the user email
+ *      required:
+ *         - email
+ *      example:
+ *         email: jc_amg@email.com
+ */
+
 
 /**
  * @swagger
- * /api/v1/auth/login:
- *   post:
- *     tags:
- *       - Auth
- *     summary: Login Usuario
- * 
- *     requestBody:
- *       description: Ingrese las credenciales de usuario
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UserLogin'
- *         application/x-www-form-urlencoded:
- *           schema: 
- *             $ref: "#/components/schemas/UserLogin"
- * 
- *     responses:
- *       200:
- *         description: Successful operation
+ * components:
+ *  schemas:
+ *    UserResetPassword:
+ *      type: object
+ *      properties:
+ *        password:
+ *          type: string
+ *          description: the user password
+ *          format: password
+ *      required:
+ *         - password
+ *      example:
+ *         password: 12345jcq9
  */
-router.post('/login', logIn)
-
-/**
- * @swagger
- * /api/v1/auth/sign-up:
- *   post:
- *     tags:
- *       - Auth
- *     summary: Sign-Up Usuario
- * 
- *     requestBody:
- *       description: Ingrese las credenciales de usuario
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UserSignUp'
- *         application/x-www-form-urlencoded:
- *           schema: 
- *             $ref: "#/components/schemas/UserSignUp"
- * 
- *     responses:
- *       200:
- *         description: Successful operation
- */
-router.post('/sign-up', verifySchema(signupSchema, 'body'), signUp)
-
-router.post('/forget-password', verifySchema(forgetPasswordSchema, 'body'), forgetPassword)
-
-router.post('/change-password/:token', verifySchema(restorePasswordSchema, 'body'), restorePassword)
-
-
-
-router.get(
-   '/me',
-   passport.authenticate('jwt', { session: false }),
-   userToken
-);
-
-router.get(
-   '/testing',
-   passport.authenticate('jwt', { session: false }),
-   async (request, response, next) => {
-      try {
-         return response.status(200).json({
-            results: {
-               user: request.user,
-               isAuthenticated: request.isAuthenticated(),
-               isUnauthenticated: request.isUnauthenticated(),
-               _sessionManager: request._sessionManager,
-               authInfo: request.authInfo,
-            },
-         });
-      } catch (error) {
-         console.log(error);
-         next(error);
-      }
-   }
-);
-
-module.exports = router

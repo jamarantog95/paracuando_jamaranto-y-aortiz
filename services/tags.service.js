@@ -2,6 +2,7 @@ const models = require('../database/models')
 const { Op } = require('sequelize')
 const { CustomError } = require('../utils/helpers')
 
+
 class TagsService {
 
     constructor() {
@@ -31,24 +32,33 @@ class TagsService {
         //Necesario para el findAndCountAll de Sequelize
         options.distinct = true
 
-        const tags = await models.Tags.findAndCountAll(options)
+        const tags = await models.Tags.scope('view_public').findAndCountAll(options)
         return tags
     }
 
-    async createTag({ name }) {
-        const transaction = await models.sequelize.transaction()
+    async createTag({ name, description }) {
+
+        const transactionInstance = await models.sequelize.transaction();
+        // let tagId = models.Tags.id
+        // let tags = models.Tags;
         try {
             let newTag = await models.Tags.create({
-                name
-            }, { transaction })
 
-            await transaction.commit()
+                name,
+                description
+            }, { transaction: transactionInstance });
+
+            await transactionInstance.commit()
             return newTag
+
         } catch (error) {
-            await transaction.rollback()
+            await transactionInstance.rollback()
             throw error
         }
+
     }
+
+
     //Return Instance if we do not converted to json (or raw:true)
     async getTagOr404(id) {
         let tag = await models.Tags.findByPk(id, { raw: true })
@@ -62,6 +72,7 @@ class TagsService {
         if (!tag) throw new CustomError('Not found Tag', 404, 'Not Found')
         return tag
     }
+
 
     async updateTag(id, obj) {
         const transaction = await models.sequelize.transaction()

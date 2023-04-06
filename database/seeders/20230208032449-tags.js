@@ -12,7 +12,7 @@ module.exports = {
     try {
       await queryInterface.bulkInsert('tags', [
         {
-          id: '1',
+          // id: '1',
           name: 'Ropa y Accesorios',
           // description: '',
           // image_url: '',
@@ -20,7 +20,7 @@ module.exports = {
           updated_at: new Date()
         },
         {
-          id: '2',
+          // id: '2',
           name: 'Deportes',
           description: '',
           image_url: '',
@@ -28,7 +28,7 @@ module.exports = {
           updated_at: new Date()
         },
         {
-          id: '3',
+          // id: '3',
           name: 'Conciertos',
           // description: '',
           // image_url: '',
@@ -36,7 +36,7 @@ module.exports = {
           updated_at: new Date()
         },
         {
-          id: '4',
+          // id: '4',
           name: 'Meet & Greet',
           // description: '',
           // image_url: '',
@@ -44,7 +44,7 @@ module.exports = {
           updated_at: new Date()
         },
         {
-          id: '5',
+          // id: '5',
           name: 'E-sport',
           // description: '',
           // image_url: '',
@@ -52,7 +52,7 @@ module.exports = {
           updated_at: new Date()
         },
         {
-          id: '6',
+          // id: '6',
           name: 'Pop/Rock',
           // description: '',
           // image_url: '',
@@ -60,7 +60,7 @@ module.exports = {
           updated_at: new Date()
         },
         {
-          id: '7',
+          // id: '7',
           name: 'Tecnologia',
           description: '',
           image_url: '',
@@ -68,7 +68,7 @@ module.exports = {
           updated_at: new Date()
         },
         {
-          id: '8',
+          // id: '8',
           name: 'Hogar y Decoracion',
           // description: '',
           // image_url: '',
@@ -76,7 +76,7 @@ module.exports = {
           updated_at: new Date()
         },
         {
-          id: '9',
+          // id: '9',
           name: 'Abastecimiento',
           // description: '',
           // image_url: '',
