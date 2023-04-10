@@ -13,25 +13,25 @@ module.exports = {
          await queryInterface.bulkInsert('usertags', [
             {
                tag_id: '3',
-               user_id: '4b852fec-8e95-482c-adc1-20fe9a1204c2',
+               user_id: '6187c598-f14c-4490-8cfe-33b525cdab33',
                created_at: new Date(),
                updated_at: new Date()
             },
             {
                tag_id: '5',
-               user_id: '4b852fec-8e95-482c-adc1-20fe9a1204c2',
+               user_id: 'd60eb39e-f9c3-4e17-b85a-ff665d455620',
                created_at: new Date(),
                updated_at: new Date()
             },
             {
                tag_id: '2',
-               user_id: '9f4287b9-6b9f-413f-803f-65f22fc671cf',
+               user_id: 'd60eb39e-f9c3-4e17-b85a-ff665d455620',
                created_at: new Date(),
                updated_at: new Date()
             },
             {
                tag_id: '6',
-               user_id: '4b852fec-8e95-482c-adc1-20fe9a1204c2',
+               user_id: '6187c598-f14c-4490-8cfe-33b525cdab33',
                created_at: new Date(),
                updated_at: new Date()
             }

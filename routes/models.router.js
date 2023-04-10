@@ -11,6 +11,7 @@ const routesState = require('./state.routes')
 const routesCity = require('./city.routes')
 const routesTag = require('./tag.routes')
 const routesRol = require('./roles.routes')
+const routesPublication = require('./publications.routes')
 
 
 function routerModels(app) {
@@ -25,6 +26,8 @@ function routerModels(app) {
   router.use('/cities', routesCity)
   router.use('/tags', routesTag)
   router.use('/roles', routesRol)
+  router.use('/publications', routesPublication)
+
 }
 
 module.exports = routerModels

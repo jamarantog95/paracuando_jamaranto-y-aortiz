@@ -30,4 +30,20 @@ const isAccountOwner = async (request, response, next) => {
 };
 
 
-module.exports = { isAdmin, isAccountOwner }
+const protectPublication = async (request, response, next) => {
+    const accountId = models.Users.id;
+    const user_id = models.Publcations.user_id;
+
+    if (accountId !== user_id) {
+        return next();
+    }
+    throw CustomError(
+        'You dont have permission to do this action',
+        403,
+        'Without permission'
+    );
+};
+
+
+
+module.exports = { isAdmin, isAccountOwner, protectPublication }
