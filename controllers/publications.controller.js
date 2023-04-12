@@ -64,35 +64,35 @@ const getPublication = async (request, response, next) => {
     }
 };
 
-const updatePublication = async (request, response, next) => {
-    let { id } = request.params;
-    let { publication_type_id, city_id, title, description, reference_link } =
-        request.body;
+// const updatePublication = async (request, response, next) => {
+//     let { id } = request.params;
+//     let { publication_type_id, city_id, title, description, reference_link } =
+//         request.body;
 
-    let errors = [];
-    let publication = await publicationsServices.getPublication(id);
+//     let errors = [];
+//     let publication = await publicationsServices.getPublication(id);
 
-    try {
-        try {
-            const publicationUpdated = await publication.update({
-                publication_type_id,
-                city_id,
-                title,
-                description,
-                reference_link,
-            });
+//     try {
+//         try {
+//             const publicationUpdated = await publication.update({
+//                 publication_type_id,
+//                 city_id,
+//                 title,
+//                 description,
+//                 reference_link,
+//             });
 
-            response.status(200).json({
-                publicationUpdated,
-                results: 'Publication updated succesfully',
-            });
-        } catch (error) {
-            errors.push();
-        }
-    } catch (error) {
-        next();
-    }
-};
+//             response.status(200).json({
+//                 publicationUpdated,
+//                 results: 'Publication updated succesfully',
+//             });
+//         } catch (error) {
+//             errors.push();
+//         }
+//     } catch (error) {
+//         next();
+//     }
+// };
 
 const deletePublication = async (request, response, next) => {
     let { id } = request.params;
@@ -137,7 +137,6 @@ module.exports = {
     getPublications,
     createPublication,
     getPublication,
-    updatePublication,
     deletePublication,
     votes,
 };

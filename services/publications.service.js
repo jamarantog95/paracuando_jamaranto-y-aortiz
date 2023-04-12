@@ -107,20 +107,20 @@ class PublicationsServices {
         }
     }
 
-    async updatePublication(id, obj) {
-        const transaction = await models.sequelize.transaction();
-        try {
-            let publication = await models.Publications.findByPk(id);
-            if (!publication)
-                throw new CustomError('Not found publication', 404, 'Not Found');
-            let updatedPublication = await publication.update(obj, { transaction });
-            await transaction.commit();
-            return updatedPublication;
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
-    }
+    // async updatePublication(id, obj) {
+    //     const transaction = await models.sequelize.transaction();
+    //     try {
+    //         let publication = await models.Publications.findByPk(id);
+    //         if (!publication)
+    //             throw new CustomError('Not found publication', 404, 'Not Found');
+    //         let updatedPublication = await publication.update(obj, { transaction });
+    //         await transaction.commit();
+    //         return updatedPublication;
+    //     } catch (error) {
+    //         await transaction.rollback();
+    //         throw error;
+    //     }
+    // }
 
     async removepublication(id) {
         const transaction = await models.sequelize.transaction();
