@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('../libs/passport');
 const { getPublications, getPublication, createPublication, deletePublication, votes, } = require('../controllers/publications.controller');
-const { protectPublication, isAdmin } = require('../middlewares/user.middleware');
+const { isAdmin } = require('../middlewares/user.middleware');
 
 const router = express.Router();
 
@@ -31,6 +31,7 @@ const router = express.Router();
  *       - bearerAuth: []
  */
 router.get('/',
+    passport.authenticate(['jwt', 'anonymous'], { session: false }),
     getPublications);
 
 
@@ -85,7 +86,7 @@ router.post(
  *       - bearerAuth: []
  */
 router.get('/:id',
-    passport.authenticate('jwt', { session: false }),
+    passport.authenticate(['jwt', 'anonymous'], { session: false }),
     getPublication);
 
 

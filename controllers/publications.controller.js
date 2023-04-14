@@ -16,14 +16,20 @@ const getPublications = async (request, response, next) => {
         query.limit = limit;
         query.offset = offset;
 
-        let publications = await publicationsServices.findAndCountPublication(query);
+        if (!user) {
+            let publications = await publicationsServices.findAndCount(query, null)
+            const results = getPagingData(publications, page, limit)
+            return response.json({ results: results })
+        }
+
+        let publications = await publicationsServices.findAndCount(query);
 
         const results = getPagingData(publications, page, limit);
-
-        return response.status(200).json({
-            publications,
-            results,
-        });
+        return response.json({ results: results })
+        // return response.status(200).json({
+        //     publications,
+        //     results,
+        // });
 
     } catch (error) {
         next(error);
@@ -72,18 +78,33 @@ const getPublication = async (request, response, next) => {
 
 
 
+    // try {
+    //     let { id } = request.params;
+
+    //     let publication = await publicationsServices.getPublicationOr404(id);
+
+    //     return response.status(200).json({
+    //         results: publication,
+    //         // results: 'Publication found',
+    //     });
+
+    // } catch (error) {
+    //     next(error);
+    // }
+
     try {
-        let { id } = request.params;
+        let user = request.user
+        let { id } = request.params
 
-        let publication = await publicationsServices.getPublicationOr404(id);
+        if (!user) {
+            let publication = await publicationsServices.getPublicationOr404(id, null)
+            return response.json({ results: publication })
+        }
 
-        return response.status(200).json({
-            results: publication,
-            // results: 'Publication found',
-        });
-
+        let publication = await publicationsServices.getPublicationOr404(id, user.id)
+        return response.json({ results: publication })
     } catch (error) {
-        next(error);
+        next(error)
     }
 };
 

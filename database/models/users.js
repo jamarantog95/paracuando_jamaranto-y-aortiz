@@ -65,9 +65,9 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true,
       timestamps: true,
       scopes: {
-         view_public: { attributes: ['id', 'first_name', 'last_name', 'email', 'username', 'email_verified', 'country_id', 'code_phone', 'phone', 'image_url', 'interests'] },
-         view_same_user: { attributes: ['id', 'first_name', 'last_name', 'email', 'username'] },
-         auth_flow: { attributes: ['id', 'first_name', 'last_name', 'email', 'username'] },
+         view_public: { attributes: ['id', 'first_name', 'last_name', 'email', 'username', 'email_verified', 'country_id', 'code_phone', 'phone', 'image_url'] },
+         view_same_user: { attributes: ['id', 'first_name', 'last_name', 'email', 'username', 'email_verified', 'country_id', 'code_phone', 'phone', 'image_url'] },
+         // auth_flow: { attributes: ['id', 'first_name', 'last_name', 'email', 'username'] },
          view_me: { attributes: ['id', 'first_name', 'last_name', 'email', 'username',] },
          no_timestamps: { attributes: { exclude: ['created_at', 'updated_at'] } }
       },

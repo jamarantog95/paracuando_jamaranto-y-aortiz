@@ -7,6 +7,7 @@ const verifySchema = require('../schemas/joiSchema.checker')
 const { signupSchema, forgetPasswordSchema, restorePasswordSchema } = require('../schemas/auth.schemas')
 
 const { signUp, logIn, forgetPassword, restorePassword, userToken } = require('../controllers/auth.controller')
+const { isAdmin } = require('../middlewares/user.middleware')
 
 /**
  * @swagger

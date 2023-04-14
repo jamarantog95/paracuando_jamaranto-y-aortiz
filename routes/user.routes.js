@@ -1,7 +1,8 @@
 const express = require('express');
 const passport = require('passport');
 const { getUsers, getUser, updateUser } = require('../controllers/user.controller');
-const { isAdmin, isAccountOwner } = require('../middlewares/user.middleware');
+const { isAdmin } = require('../middlewares/user.middleware');
+const { userToken } = require('../controllers/auth.controller');
 const router = express.Router()
 
 
@@ -32,7 +33,6 @@ const router = express.Router()
 router.get('/',
     passport.authenticate('jwt', { session: false }),
     isAdmin,
-    isAccountOwner,
     getUsers);
 
 

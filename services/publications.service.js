@@ -6,8 +6,42 @@ const { CustomError } = require('../utils/helpers');
 class PublicationsServices {
     constructor() { }
 
-    async findAndCountPublication(query) {
+    async findAndCount(query, user_id) {
         const options = {
+            attributes: {
+                include: [
+                    [
+                        cast(
+                            literal(
+                                `(SELECT COUNT(*) FROM "votes" 
+                                WHERE "votes"."publication_id" = "Publications"."id")`
+                            ),
+                            "integer"
+                        ),
+                        "votes_count",
+                    ],
+                ],
+            },
+            include: [
+                {
+                    model: models.Users,
+                    as: 'user',
+                    attributes: ['first_name', 'last_name', 'image_url']
+                },
+                {
+                    model: models.PublicationTypes,
+                    as: 'publication_type',
+                },
+                {
+                    model: models.PublicationsImages,
+                    as: 'images'
+                },
+                {
+                    model: models.Tags,
+                    as: 'tags',
+                    through: { attributes: [] },
+                },
+            ],
             where: {},
         };
 
@@ -17,50 +51,118 @@ class PublicationsServices {
             options.offset = offset;
         }
 
-        const { id } = query;
-        if (id) {
-            options.where.id = { [Op.iLike]: `%${id}%` };
+        if (user_id) {
+            options.include.push({
+                model: models.Users,
+                as: 'same_vote',
+                where: { id: user_id },
+                attributes: ['id', 'first_name', 'last_name'],
+                required: false,
+                through: {
+                    where: { user_id },
+                    attributes: []
+                }
+            })
+        }
+
+        // const { id } = query;
+        // if (id) {
+        //     options.where.id = { [Op.iLike]: `%${id}%` };
+        // }
+
+
+        if (user_id) {
+            options.include.push({
+                model: models.Users,
+                as: 'same_vote',
+                where: { id: user_id },
+                attributes: ['id', 'first_name', 'last_name'],
+                required: false,
+                through: {
+                    where: { user_id },
+                    attributes: []
+                }
+            })
+        }
+
+        const { title } = query
+        if (title) {
+            options.where.title = { [Op.iLike]: `%${title}%` }
+        }
+
+        const { description } = query
+        if (description) {
+            options.where.description = { [Op.iLike]: `%${description}%` }
+        }
+
+        const { content } = query
+        if (content) {
+            options.where.content = { [Op.iLike]: `%${content}%` }
+        }
+
+        const { reference_link } = query
+        if (reference_link) {
+            options.where.reference_link = { [Op.iLike]: `%${reference_link}%` }
+        }
+
+        const { created_at } = query
+        if (created_at) {
+            options.where.created_at = { [Op.lte]: new Date(created_at) }
         }
 
         const { publication_type_id } = query;
         if (publication_type_id) {
-            options.where.publication_type_id = {
-                [Op.iLike]: `%${publication_type_id}%`,
-            };
-        }
-
-        const { title } = query;
-        if (title) {
-            options.where.title = {
-                [Op.iLike]: `%${title}%`,
-            };
-        }
-
-        const { description } = query;
-        if (description) {
-            options.where.description = {
-                [Op.iLike]: `%${description}%`,
-            };
-        }
-
-        const { reference_link } = query;
-        if (reference_link) {
-            options.where.reference_link = {
-                [Op.iLike]: `%${reference_link}%`,
-            };
+            options.where.publication_type_id = { [Op.iLike]: `%${publication_type_id}%`, };
         }
 
         const { tags } = query;
         if (tags) {
-            options.where.tags = {
-                [Op.iLike]: `%${tags}%`,
-            };
+            let tagsIDs = tags.split(',')
+            options.include.push({
+                model: models.Tags,
+                as: 'filtered_tags',
+                required: true,
+                where: { id: tagsIDs },
+                attributes: { exclude: ['created_at', 'updated_at', 'description'] },
+                through: {
+                    attributes: []
+                }
+            })
         }
 
-        const { created_at } = query;
-        if (created_at) {
-            options.where.created_at = { [Op.iLike]: `%${created_at}%` };
-        }
+        // const { description } = query;
+        // if (description) {
+        //     options.where.description = {
+        //         [Op.iLike]: `%${description}%`,
+        //     };
+        // }
+
+        // const { reference_link } = query;
+        // if (reference_link) {
+        //     options.where.reference_link = {
+        //         [Op.iLike]: `%${reference_link}%`,
+        //     };
+        // }
+
+
+        // const { publication_type_id } = query;
+        // if (publication_type_id) {
+        //     options.where.publication_type_id = {
+        //         [Op.iLike]: `%${publication_type_id}%`,
+        //     };
+        // }
+
+        // const { tags } = query;
+        // if (tags) {
+        //     options.where.tags = {
+        //         [Op.iLike]: `%${tags}%`,
+        //     };
+        // }
+
+        // const { created_at } = query;
+        // if (created_at) {
+        //     options.where.created_at = { [Op.iLike]: `%${created_at}%` };
+        // }
 
         options.distinct = true;
 
@@ -76,7 +178,53 @@ class PublicationsServices {
     // }
 
     //Return Instance if we do not converted to json (or raw:true)
-    async getPublicationOr404(id) {
+    async getPublicationOr404(id, user_id) {
+        let options = {
+            attributes: {
+                include: [
+                    [cast(literal(
+                        `(SELECT COUNT(*) FROM "votes" 
+                              WHERE "votes"."publication_id" = "Publications"."id")`), 'integer'),
+                        'votes_count']
+                ]
+            },
+            include: [
+                {
+                    model: models.Users,
+                    as: 'user',
+                    attributes: ['first_name', 'last_name', 'image_url']
+                },
+                {
+                    model: models.PublicationTypes,
+                    as: 'publication_type',
+                },
+                {
+                    model: models.PublicationsImages,
+                    as: 'images'
+                },
+                {
+                    model: models.Tags,
+                    as: 'tags',
+                    through: { attributes: [] },
+                },
+            ],
+        }
+
+
+        if (user_id) {
+            options.include.push({
+                model: models.Users,
+                as: 'same_vote',
+                where: { id: user_id },
+                attributes: ['id', 'first_name', 'last_name'],
+                required: false,
+                through: {
+                    where: { user_id },
+                    attributes: []
+                }
+            })
+        }
+
         let publication = await models.Publications.findByPk(id, { raw: true })
         if (!publication) throw new CustomError('Not found Publication', 404, 'Not Found')
         return publication
