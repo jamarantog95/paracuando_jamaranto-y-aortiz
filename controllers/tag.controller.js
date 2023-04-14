@@ -22,7 +22,7 @@ const getTags = async (request, response, next) => {
         return response.status(200).json({
             tags,
             results,
-            results: 'Tags found',
+            // results: 'Tags found',
         });
     } catch (error) {
         next(error)
@@ -38,8 +38,8 @@ const getTag = async (request, response, next) => {
         let tag = await tagsService.getTagOr404(id);
 
         return response.status(200).json({
-            tag,
-            results: 'Tag found',
+            results: tag,
+            // results: 'Tag found',
         });
 
     } catch (error) {
@@ -53,9 +53,9 @@ const createTag = async (request, response, next) => {
     try {
         let { body } = request
         let tag = await tagsService.createTag(body);
-        return response.status(200).json({
-            tag,
-            results: 'ok'
+        return response.status(201).json({
+            results: tag,
+            // results: 'ok'
         })
 
     } catch (error) {
@@ -76,8 +76,8 @@ const updateTag = async (request, response, next) => {
         })
 
         return response.status(200).json({
-            tagUpdated,
-            results: 'Tag updated succesfully'
+            results: tagUpdated,
+            // results: 'Tag updated succesfully'
         })
 
     } catch (error) {
@@ -94,8 +94,9 @@ const deleteTag = async (request, response, next) => {
         let tagDeleted = await tagsService.removeTag(id)
 
         return response.status(200).json({
-            tagDeleted,
-            results: 'Tag deleted succesfully'
+            results: tagDeleted,
+            message: "removed",
+            // results: 'Tag deleted succesfully'
         })
 
     } catch (error) {

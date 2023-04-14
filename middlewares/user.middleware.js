@@ -32,7 +32,7 @@ const isAccountOwner = async (request, response, next) => {
 
 const protectPublication = async (request, response, next) => {
     const accountId = models.Users.id;
-    const user_id = models.Publcations.user_id;
+    const user_id = models.Publications.user_id;
 
     if (accountId !== user_id) {
         return next();

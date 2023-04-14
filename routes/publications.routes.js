@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('../libs/passport');
 const { getPublications, getPublication, createPublication, deletePublication, votes, } = require('../controllers/publications.controller');
-const { protectPublication } = require('../middlewares/user.middleware');
+const { protectPublication, isAdmin } = require('../middlewares/user.middleware');
 
 const router = express.Router();
 
@@ -30,7 +30,8 @@ const router = express.Router();
  *     security:  
  *       - bearerAuth: []
  */
-router.get('/', getPublications);
+router.get('/',
+    getPublications);
 
 
 /**
@@ -59,7 +60,6 @@ router.get('/', getPublications);
  */
 router.post(
     '/',
-    passport.authenticate('jwt', { session: false }),
     createPublication
 );
 
@@ -84,7 +84,9 @@ router.post(
  *     security:  
  *       - bearerAuth: []
  */
-router.get('/:id', getPublication);
+router.get('/:id',
+    passport.authenticate('jwt', { session: false }),
+    getPublication);
 
 
 // router.put('/:id', updatePublication);
@@ -112,7 +114,11 @@ router.get('/:id', getPublication);
  *       - bearerAuth: []
 
  */
-router.delete('/:id', protectPublication, deletePublication);
+router.delete('/:id',
+    passport.authenticate('jwt', { session: false }),
+    isAdmin,
+    // protectPublication,
+    deletePublication);
 
 
 /**
@@ -139,6 +145,7 @@ router.delete('/:id', protectPublication, deletePublication);
 router.post(
     '/:uuid/vote',
     passport.authenticate('jwt', { session: false }),
+    isAdmin,
     votes
 );
 

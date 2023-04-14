@@ -1,5 +1,7 @@
 const express = require('express');
 const { getTags, getTag, createTag, updateTag, deleteTag } = require('../controllers/tag.controller');
+const passport = require('passport');
+const { isAdmin } = require('../middlewares/user.middleware');
 
 const router = express.Router()
 
@@ -27,7 +29,9 @@ const router = express.Router()
  *     security:  
  *       - bearerAuth: []
  */
-router.get('/', getTags);
+router.get('/',
+    passport.authenticate('jwt', { session: false }),
+    getTags);
 
 
 /**
@@ -50,7 +54,9 @@ router.get('/', getTags);
  *     security:  
  *       - bearerAuth: []
  */
-router.get('/:id', getTag);
+router.get('/:id',
+    passport.authenticate('jwt', { session: false }),
+    getTag);
 
 
 /**
@@ -77,7 +83,10 @@ router.get('/:id', getTag);
  *     security:  
  *       - bearerAuth: []
  */
-router.post('/', createTag);
+router.post('/',
+    passport.authenticate('jwt', { session: false }),
+    isAdmin,
+    createTag);
 
 
 /**
@@ -112,7 +121,10 @@ router.post('/', createTag);
  *       - bearerAuth: []
 
  */
-router.put('/:id', updateTag);
+router.put('/:id',
+    passport.authenticate('jwt', { session: false }),
+    isAdmin,
+    updateTag);
 
 
 /**
@@ -137,7 +149,10 @@ router.put('/:id', updateTag);
  *       - bearerAuth: []
 
  */
-router.delete('/:id', deleteTag);
+router.delete('/:id',
+    passport.authenticate('jwt', { session: false }),
+    isAdmin,
+    deleteTag);
 
 
 module.exports = router

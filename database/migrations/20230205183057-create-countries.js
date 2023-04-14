@@ -1,10 +1,10 @@
-//migration de Roles creada por sequelize-cli y editada por nosotros
+//migration de Countries creada por sequelize-cli y editada por nosotros
 'use strict'
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction()
     try {
-      await queryInterface.createTable('roles', {
+      await queryInterface.createTable('countries', {
         id: {
           allowNull: false,
           autoIncrement: true,
@@ -13,16 +13,16 @@ module.exports = {
         },
         name: {
           allowNull: false,
-          unique: true,
-          type: Sequelize.STRING
+          type: Sequelize.STRING,
+          unique: true
         },
         created_at: {
           allowNull: false,
-          type: Sequelize.DATE
+          type: Sequelize.DATE,
         },
         updated_at: {
           allowNull: false,
-          type: Sequelize.DATE
+          type: Sequelize.DATE,
         }
       }, { transaction })
       await transaction.commit()
@@ -34,7 +34,7 @@ module.exports = {
   down: async (queryInterface, /*Sequelize*/) => {
     const transaction = await queryInterface.sequelize.transaction()
     try {
-      await queryInterface.dropTable('roles', { transaction })
+      await queryInterface.dropTable('countries', { transaction })
       await transaction.commit()
     } catch (error) {
       await transaction.rollback()

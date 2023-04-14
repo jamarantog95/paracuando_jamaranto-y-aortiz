@@ -7,39 +7,70 @@ const usersService = new UsersService()
 
 const getUsers = async (request, response, next) => {
 
-    let query = request.query
-    let errors = [];
-    let users = await usersService.findAndCount(query);
-
     try {
-        try {
-            response.status(200).json({
-                users,
-                results: 'Users found',
-            });
-        } catch (error) {
-            errors.push()
-        }
+        let query = request.query
+        let { page, size } = query
+
+        const { limit, offset } = getPagination(page, size, '10')
+        query.limit = limit
+        query.offset = offset
+
+        let users = await usersService.findAndCount(query);
+
+        const results = getPagingData(users, page, limit)
+        return response.status(200).json({
+            users,
+            results,
+            // results: 'Tags found',
+        });
+
     } catch (error) {
-        next(error);
+        next(error)
     }
+
+
+    // try {
+    //     try {
+    //         response.status(200).json({
+    //             users,
+    //             results,
+    //             // results: 'Users found',
+    //         });
+    //     } catch (error) {
+    //         errors.push()
+    //     }
+    // } catch (error) {
+    //     next(error);
+    // }
 }
 
 const getUser = async (request, response, next) => {
 
-    let { id } = request.params
-    let errors = [];
-    let user = await usersService.getUser(id);
+    // let { id } = request.params
+    // let errors = [];
+    // let user = await usersService.getUser(id);
 
+    // try {
+    //     try {
+    //         response.status(200).json({
+    //             user,
+    //             results: 'User found',
+    //         });
+    //     } catch (error) {
+    //         errors.push();
+    //     }
+    // } catch (error) {
+    //     next(error);
+    // }
     try {
-        try {
-            response.status(200).json({
-                user,
-                results: 'User found',
-            });
-        } catch (error) {
-            errors.push();
-        }
+        let { id } = request.params
+        let tag = await usersService.getUser(id);
+
+        return response.status(200).json({
+            results: tag,
+            // results: 'Tag found',
+        });
+
     } catch (error) {
         next(error);
     }
@@ -48,7 +79,7 @@ const getUser = async (request, response, next) => {
 
 const updateUser = async (request, response, next) => {
     let { id } = request.params;
-    let { first_name, last_name, email, username, country_id, code_phone, phone } = request.body;
+    let { first_name, last_name, country_id, code_phone, phone } = request.body;
 
     let errors = [];
     let user = await usersService.getUser(id);
@@ -58,16 +89,16 @@ const updateUser = async (request, response, next) => {
             const userUpdated = await user.update({
                 first_name,
                 last_name,
-                email,
-                username,
                 country_id,
                 code_phone,
                 phone
             })
 
             response.status(200).json({
-                userUpdated,
-                results: 'User updated succesfully'
+                results: userUpdated,
+                message: "Succes Update"
+                // results: 'User updated succesfully'
+
             })
 
         } catch (error) {

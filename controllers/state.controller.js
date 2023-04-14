@@ -22,7 +22,7 @@ const getStates = async (request, response, next) => {
         return response.status(200).json({
             states,
             results,
-            results: 'States found',
+            // results: 'States found',
         });
     } catch (error) {
         next(error)

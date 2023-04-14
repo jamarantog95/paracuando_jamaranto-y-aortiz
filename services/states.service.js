@@ -31,7 +31,7 @@ class StatesService {
       //Necesario para el findAndCountAll de Sequelize
       options.distinct = true
 
-      const states = await models.States.scope('view_public').findAndCountAll(options)
+      const states = await models.States.findAndCountAll(options)
       return states
    }
 

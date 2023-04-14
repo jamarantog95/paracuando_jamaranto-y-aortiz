@@ -64,19 +64,22 @@ class PublicationsServices {
 
         options.distinct = true;
 
-        const publications = await models.Publications.scope(
-            'view_public'
-        ).findAndCountAll(options);
+        const publications = await models.Publications.findAndCountAll(options);
         return publications;
     }
 
-    async getPublication(id) {
-        let publications = await models.Publications.scope('view_public').findByPk(
-            id
-        );
-        if (!publications)
-            throw new CustomError('Not found publication', 404, 'Not found');
-        return publications;
+    // async getPublication(id) {
+    //     let publications = await models.Publications.findByPk(id);
+    //     if (!publications)
+    //         throw new CustomError('Not found publication', 404, 'Not found');
+    //     return publications;
+    // }
+
+    //Return Instance if we do not converted to json (or raw:true)
+    async getPublicationOr404(id) {
+        let publication = await models.Publications.findByPk(id, { raw: true })
+        if (!publication) throw new CustomError('Not found Publication', 404, 'Not Found')
+        return publication
     }
 
     async createPublication(obj, request) {
@@ -125,15 +128,19 @@ class PublicationsServices {
     async removepublication(id) {
         const transaction = await models.sequelize.transaction();
         try {
-            let publication = await models.Publications.findByPk(id);
+            let publication = await models.Publications.findByPk(id)
+
             if (!publication)
-                throw new CustomError('Not found publication', 404, 'Not Found');
-            await publication.destroy({ transaction });
+                throw new CustomError('Not found publication', 404, 'Not Found')
+
+            await publication.destroy({ transaction })
+
             await transaction.commit();
-            return publication;
+
+            return publication
         } catch (error) {
             await transaction.rollback();
-            throw error;
+            throw error
         }
     }
 }

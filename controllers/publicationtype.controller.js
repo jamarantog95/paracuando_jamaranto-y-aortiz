@@ -22,7 +22,7 @@ const getPublicationsTypes = async (request, response, next) => {
         return response.status(200).json({
             publicationstypes,
             results,
-            results: 'Publications Types found',
+            // results: 'Publications Types found',
         });
     } catch (error) {
         next(error)
@@ -37,8 +37,8 @@ const getPublicationType = async (request, response, next) => {
         let publicationtype = await publicationstypesService.getPublicationType(id);
 
         return response.status(200).json({
-            publicationtype,
-            results: 'Publication Type found',
+            results: publicationtype,
+            // results: 'Publication Type found',
         });
 
     } catch (error) {
@@ -58,8 +58,9 @@ const updatePublicationType = async (request, response, next) => {
         })
 
         return response.status(200).json({
-            publicationtypeUpdated,
-            results: 'Publication Type updated succesfully'
+            results: publicationtypeUpdated,
+            // message: "Succes Update",
+            // results: 'Publication Type updated succesfully'
         })
 
     } catch (error) {

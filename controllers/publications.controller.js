@@ -11,17 +11,20 @@ const getPublications = async (request, response, next) => {
     try {
         let query = request.query;
         let { page, size } = query;
+
         const { limit, offset } = getPagination(page, size, '10');
         query.limit = limit;
         query.offset = offset;
 
-        let publications = await publicationsServices.findAndCountPublication(
-            query
-        );
+        let publications = await publicationsServices.findAndCountPublication(query);
+
         const results = getPagingData(publications, page, limit);
-        response.status(200).json({
+
+        return response.status(200).json({
+            publications,
             results,
         });
+
     } catch (error) {
         next(error);
     }
@@ -30,39 +33,60 @@ const getPublications = async (request, response, next) => {
 const createPublication = async (request, response, next) => {
     try {
         let { body } = request;
-        let errors = [];
+        // let errors = [];
         let publication = await publicationsServices.createPublication(
             body,
             request
         );
+
         return response.status(201).json({
-            publication,
-            results: 'Success',
-            errors,
+            // publication,
+            results: publication,
+            // results: 'Success',
+            // errors,
         });
+
     } catch (error) {
         next(error);
     }
 };
 
 const getPublication = async (request, response, next) => {
-    let { id } = request.params;
-    let errors = [];
-    let user = await publicationsServices.getPublication(id);
+    // let { id } = request.params;
+    // let errors = [];
+    // let user = await publicationsServices.getPublication(id);
+
+    // try {
+    //     try {
+    //         response.status(200).json({
+    //             user,
+    //             results: 'Publication found',
+    //         });
+    //     } catch (error) {
+    //         errors.push();
+    //     }
+    // } catch (error) {
+    //     next(error);
+    // }
+
+
+
 
     try {
-        try {
-            response.status(200).json({
-                user,
-                results: 'Publication found',
-            });
-        } catch (error) {
-            errors.push();
-        }
+        let { id } = request.params;
+
+        let publication = await publicationsServices.getPublicationOr404(id);
+
+        return response.status(200).json({
+            results: publication,
+            // results: 'Publication found',
+        });
+
     } catch (error) {
         next(error);
     }
 };
+
 
 // const updatePublication = async (request, response, next) => {
 //     let { id } = request.params;
@@ -95,22 +119,35 @@ const getPublication = async (request, response, next) => {
 // };
 
 const deletePublication = async (request, response, next) => {
-    let { id } = request.params;
-    let errors = [];
-    let publication = await publicationsServices.removepublication(id);
+    // let { id } = request.params;
+    // // let errors = [];
+    // let publication = await publicationsServices.removepublication(id);
+
+    // try {
+    //     try {
+    //         response.status(201).json({
+    //             results: publication,
+    //             // results: 'Publication Deleted',
+    //         });
+    //     } catch (error) {
+    //         errors.push();
+    //     }
+    // } catch (error) {
+    //     next(error);
+    // }
 
     try {
-        try {
-            response.status(200).json({
-                publication,
-                results: 'Publication Deleted',
-            });
-        } catch (error) {
-            errors.push();
-        }
+        let { id } = request.params;
+        let publication = await publicationsServices.removepublication(id);
+        return response.status(200).json({
+            results: publication,
+            // message: "removed",
+            // results: 'Publication Deleted',
+        });
     } catch (error) {
         next(error);
     }
+
 };
 
 const votes = async (request, response, next) => {

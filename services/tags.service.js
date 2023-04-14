@@ -32,7 +32,7 @@ class TagsService {
         //Necesario para el findAndCountAll de Sequelize
         options.distinct = true
 
-        const tags = await models.Tags.scope('view_public').findAndCountAll(options)
+        const tags = await models.Tags.findAndCountAll(options)
         return tags
     }
 

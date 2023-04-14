@@ -22,7 +22,7 @@ const getCities = async (request, response, next) => {
         return response.status(200).json({
             cities,
             results,
-            results: 'Cities found',
+            // results: 'Cities found',
         });
     } catch (error) {
         next(error)

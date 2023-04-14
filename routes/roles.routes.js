@@ -1,5 +1,6 @@
 const express = require('express');
 const { getRoles } = require('../controllers/roles.controller');
+const passport = require('passport');
 
 
 const router = express.Router()
@@ -27,7 +28,9 @@ const router = express.Router()
  *     security:  
  *       - bearerAuth: []
  */
-router.get('/', getRoles);
+router.get('/',
+    passport.authenticate('jwt', { session: false }),
+    getRoles);
 
 
 module.exports = router

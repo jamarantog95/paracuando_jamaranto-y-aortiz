@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const { getUsers, getUser, updateUser } = require('../controllers/user.controller');
-const { isAdmin } = require('../middlewares/user.middleware');
+const { isAdmin, isAccountOwner } = require('../middlewares/user.middleware');
 const router = express.Router()
 
 
@@ -32,6 +32,7 @@ const router = express.Router()
 router.get('/',
     passport.authenticate('jwt', { session: false }),
     isAdmin,
+    isAccountOwner,
     getUsers);
 
 
@@ -55,7 +56,10 @@ router.get('/',
  *     security:  
  *       - bearerAuth: []
  */
-router.get('/:id', getUser);
+router.get('/:id',
+    passport.authenticate('jwt', { session: false }),
+    isAdmin,
+    getUser);
 
 
 /**
@@ -90,7 +94,10 @@ router.get('/:id', getUser);
  *       - bearerAuth: []
 
  */
-router.put('/:id', updateUser);
+router.put('/:id',
+    passport.authenticate('jwt', { session: false }),
+    isAdmin,
+    updateUser);
 
 
 

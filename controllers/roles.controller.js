@@ -24,7 +24,7 @@ const getRoles = async (request, response, next) => {
         return response.status(200).json({
             roles,
             results,
-            results: 'Roles found',
+            // results: 'Roles found',
         });
     } catch (error) {
         next(error)

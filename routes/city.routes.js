@@ -1,5 +1,6 @@
 const express = require('express');
 const { getCities } = require('../controllers/city.controller');
+const passport = require('passport');
 
 const router = express.Router()
 
@@ -26,7 +27,9 @@ const router = express.Router()
  *     security:  
  *       - bearerAuth: []
  */
-router.get('/', getCities);
+router.get('/',
+    passport.authenticate('jwt', { session: false }),
+    getCities);
 
 
 module.exports = router

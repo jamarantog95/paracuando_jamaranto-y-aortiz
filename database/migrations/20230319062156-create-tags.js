@@ -1,10 +1,10 @@
-//migration de Countries creada por sequelize-cli y editada por nosotros
-'use strict'
+'use strict';
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  async up(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction()
     try {
-      await queryInterface.createTable('countries', {
+      await queryInterface.createTable('tags', {
         id: {
           allowNull: false,
           autoIncrement: true,
@@ -12,32 +12,42 @@ module.exports = {
           type: Sequelize.INTEGER
         },
         name: {
+          allowNull: false,
           type: Sequelize.STRING,
-          allowNull: false,
+          unique: true
         },
-        created_at: {
-          type: Sequelize.DATE,
-          allowNull: false,
+        description: {
+          type: Sequelize.STRING,
         },
-        updated_at: {
-          type: Sequelize.DATE,
+        image_url: {
+          type: Sequelize.TEXT,
+        },
+        createdAt: {
           allowNull: false,
+          type: Sequelize.DATE,
+          field: 'created_at'
+        },
+        updatedAt: {
+          allowNull: false,
+          type: Sequelize.DATE,
+          field: 'updated_at'
         }
-      }, { transaction })
+      }, { transaction });
+
       await transaction.commit()
     } catch (error) {
       await transaction.rollback()
       throw error
     }
   },
-  down: async (queryInterface, /*Sequelize*/) => {
+  async down(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction()
     try {
-      await queryInterface.dropTable('countries', { transaction })
+      await queryInterface.dropTable('tags', { transaction })
       await transaction.commit()
     } catch (error) {
       await transaction.rollback()
       throw error
     }
   }
-}
+};

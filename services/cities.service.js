@@ -31,7 +31,7 @@ class CitiesService {
         //Necesario para el findAndCountAll de Sequelize
         options.distinct = true
 
-        const cities = await models.Cities.scope('view_public').findAndCountAll(options)
+        const cities = await models.Cities.findAndCountAll(options)
         return cities
     }
 

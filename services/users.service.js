@@ -33,7 +33,7 @@ class UsersService {
       //Necesario para el findAndCountAll de Sequelize
       options.distinct = true
 
-      const users = await models.Users.findAndCountAll(options)
+      const users = await models.Users.scope('view_public').findAndCountAll(options)
       return users
    }
 
@@ -59,13 +59,15 @@ class UsersService {
 
 
    async getAuthUserOr404(id) {
-      let user = await models.Users.scope('auth_flow').findByPk(id, { raw: true })
+      let user = await models.Users.findByPk(id, { raw: true })
+      // let user = await models.Users.scope('auth_flow').findByPk(id, { raw: true })
       if (!user) throw new CustomError('Not found User', 404, 'Not Found')
       return user
    }
 
    async getUser(id) {
-      let user = await models.Users.scope('auth_flow').findByPk(id)
+      let user = await models.Users.findByPk(id, { raw: true })
+      // let user = await models.Users.scope('auth_flow').findByPk(id)
       if (!user) throw new CustomError('Not found User', 404, 'Not Found')
       return user
    }

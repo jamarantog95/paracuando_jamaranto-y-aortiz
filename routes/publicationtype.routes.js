@@ -1,5 +1,7 @@
 const express = require('express');
 const { getPublicationsTypes, getPublicationType, updatePublicationType } = require('../controllers/publicationtype.controller');
+const passport = require('passport');
+const { isAdmin } = require('../middlewares/user.middleware');
 
 const router = express.Router()
 
@@ -26,7 +28,9 @@ const router = express.Router()
  *     security:  
  *       - bearerAuth: []
  */
-router.get('/', getPublicationsTypes);
+router.get('/',
+    passport.authenticate('jwt', { session: false }),
+    getPublicationsTypes);
 
 
 /**
@@ -54,7 +58,9 @@ router.get('/', getPublicationsTypes);
  *     security:  
  *       - bearerAuth: []
  */
-router.get('/:id', getPublicationType);
+router.get('/:id',
+    passport.authenticate('jwt', { session: false }),
+    getPublicationType);
 
 
 /**
@@ -89,7 +95,10 @@ router.get('/:id', getPublicationType);
  *     security:  
  *       - bearerAuth: []
  */
-router.put('/:id', updatePublicationType);
+router.put('/:id',
+    passport.authenticate('jwt', { session: false }),
+    isAdmin,
+    updatePublicationType);
 
 
 
